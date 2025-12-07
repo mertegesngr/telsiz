@@ -1,124 +1,134 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özel Telsiz Hattı</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Renkli Telsiz</title>
     <style>
-        /* Telsiz Teması Tasarımı */
+        /* --- GENEL SAYFA DÜZENİ --- */
         body {
-            background-color: #1a1a1a;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
+            background-color: #e5ddd5; /* WhatsApp tarzı yumuşak arka plan */
+            /* Daha modern bir yazı tipi (yoksa standart sans-serif kullanır) */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100vh; /* Tüm ekran yüksekliğini kapla */
+            height: -webkit-fill-available; /* iOS Safari için tam yükseklik düzeltmesi */
             margin: 0;
-            overflow: hidden;
+            overflow: hidden; /* Sayfanın kaymasını engelle */
         }
 
-        /* Başlık Alanı */
+        /* --- BAŞLIK ALANI (HEADER) --- */
         header {
-            background: #000;
+            /* Canlı mavi gradyan geçiş */
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            color: white;
             padding: 15px;
             text-align: center;
-            border-bottom: 2px solid #333;
-            letter-spacing: 2px;
-            box-shadow: 0 2px 10px rgba(0, 255, 0, 0.1);
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Hafif gölge */
+            z-index: 10;
         }
 
-        /* Mesaj Alanı */
+        /* --- MESAJLARIN AKTIĞI ALAN --- */
         #chat-box {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        /* Mesaj Balonları */
-        .mesaj {
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            position: relative;
-            word-wrap: break-word;
-        }
-
-        .mesaj.ben {
-            align-self: flex-end;
-            background-color: #004d00;
-            border-right: 4px solid #0f0;
-        }
-
-        .mesaj.o {
-            align-self: flex-start;
-            background-color: #333;
-            border-left: 4px solid #666;
-            color: #ccc;
-        }
-
-        /* Giriş Alanı */
-        form {
-            background: #000;
+            flex: 1; /* Kalan tüm alanı kapla */
+            overflow-y: auto; /* Dikey kaydırmaya izin ver */
             padding: 15px;
             display: flex;
-            border-top: 1px solid #333;
+            flex-direction: column;
+            gap: 10px; /* Mesajlar arası boşluk */
+            /* Arka plana hafif bir desen ekleyelim (isteğe bağlı) */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
 
+        /* --- MESAJ BALONLARI --- */
+        .mesaj {
+            max-width: 75%; /* Mesaj genişliğini sınırla */
+            padding: 10px 15px;
+            border-radius: 20px; /* Yuvarlak köşeler */
+            font-size: 15px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Hafif derinlik */
+            line-height: 1.4;
+        }
+
+        /* Benim gönderdiğim mesajlar (Sağda, Mavi) */
+        .mesaj.ben {
+            align-self: flex-end; /* Sağa yasla */
+            background-color: #0084ff; /* Canlı mavi */
+            color: white;
+            border-bottom-right-radius: 5px; /* Konuşma balonu efekti için köşeyi sivrilt */
+        }
+
+        /* Karşıdan gelen mesajlar (Solda, Beyaz) */
+        .mesaj.o {
+            align-self: flex-start; /* Sola yasla */
+            background-color: #ffffff; /* Temiz beyaz */
+            color: #333; /* Koyu gri yazı */
+            border-bottom-left-radius: 5px; /* Konuşma balonu efekti */
+        }
+
+        /* --- GİRİŞ ALANI (ALT KISIM) --- */
+        form {
+            background: #f0f2f5; /* Açık gri zemin */
+            padding: 10px;
+            display: flex;
+            align-items: center; /* Dikey ortala */
+            border-top: 1px solid #ddd;
+            /* iOS'ta klavye açılınca güvenli alan bırak */
+            padding-bottom: env(safe-area-inset-bottom, 10px); 
+        }
+
+        /* Yazı yazma kutusu */
         input {
             flex: 1;
-            background: #222;
-            border: 1px solid #0f0;
-            color: #0f0;
-            padding: 12px;
+            background: #ffffff;
+            border: none;
+            border-radius: 25px; /* Hap şeklinde yuvarlak */
+            color: #333;
+            padding: 12px 20px;
             outline: none;
             font-family: inherit;
+            font-size: 16px; /* Mobilde rahat okuma için 16px şart */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
+        /* Gönder butonu (Ok işareti) */
         button {
-            background: #0f0;
-            color: #000;
+            background: #007bff; /* Mavi */
+            color: white;
             border: none;
-            padding: 0 25px;
-            font-weight: bold;
+            border-radius: 50%; /* Tam yuvarlak */
+            width: 45px;
+            height: 45px;
+            margin-left: 8px;
             cursor: pointer;
-            margin-left: 10px;
-            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background 0.2s;
         }
+        button:hover { background: #0056b3; } /* Üzerine gelince koyulaş */
+        button:active { transform: scale(0.95); } /* Tıklama efekti */
 
-        button:hover {
-            background: #0c0;
-        }
-
-        /* Scrollbar Gizleme */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #111;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-        }
+        /* Scrollbar'ı gizle (daha temiz görünüm için) */
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-
 <body>
 
-    <header>GİZLİ FREKANS /// ONLINE</header>
+    <header>FREKANS: MOBİL 📢</header>
 
     <div id="chat-box">
-    </div>
+        </div>
 
     <form id="mesajForm">
-        <input type="text" id="mesajInput" placeholder="Mesaj gönder..." autocomplete="off">
-        <button type="submit">GÖNDER</button>
+        <input type="text" id="mesajInput" placeholder="Bir mesaj yaz..." autocomplete="off">
+        <button type="submit">➤</button>
     </form>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -136,11 +146,9 @@
             appId: "1:371673496834:web:b970bcc0b131861781d61b"
         };
 
-        // Uygulamayı Başlatma
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        // Kullanıcı ID Oluşturma
+        
         let myID = localStorage.getItem('userID');
         if (!myID) {
             myID = 'user_' + Math.floor(Math.random() * 100000);
@@ -151,11 +159,9 @@
         const form = document.getElementById('mesajForm');
         const input = document.getElementById('mesajInput');
 
-        // MESAJ GÖNDERME
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const text = input.value.trim();
-
             if (text !== "") {
                 db.ref('mesajlar').push({
                     gonderen: myID,
@@ -163,15 +169,14 @@
                     zaman: Date.now()
                 });
                 input.value = '';
+                input.focus(); // Mesaj attıktan sonra klavye kapanmasın
             }
         });
 
-        // MESAJ ALMA (CANLI DİNLEME)
         db.ref('mesajlar').limitToLast(100).on('child_added', (snapshot) => {
             const data = snapshot.val();
-
             const div = document.createElement('div');
-            // Mesajı kimin attığını kontrol et
+            
             if (data.gonderen === myID) {
                 div.className = 'mesaj ben';
                 div.textContent = data.mesaj;
@@ -179,16 +184,11 @@
                 div.className = 'mesaj o';
                 div.textContent = data.mesaj;
             }
-
+            
             chatBox.appendChild(div);
-            // Otomatik en aşağı kaydır
-            chatBox.scrollTop = chatBox.scrollHeight;
+            // Yumuşak bir şekilde en alta kaydır
+            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
         });
     </script>
 </body>
-
-
-
-    
-
 </html>
