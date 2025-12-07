@@ -142,7 +142,8 @@
 </head>
 <body>
 
-    <header>SABİT HAT 📡</header>
+    <header>SABİT HAT 📡 
+    <button id="temizleBtn" style="background:red; color:white; border:none; padding:5px; width:100%; cursor:pointer;">⚠️ HATTI TEMİZLE ⚠️</button></header>
 
     <div id="chat-box">
         </div>
@@ -223,6 +224,19 @@
             chatBox.appendChild(div);
             scrollToBottom();
         });
+        // TEMİZLEME BUTONU
+    document.getElementById('temizleBtn').addEventListener('click', () => {
+        if(confirm("Tüm konuşma geçmişi silinecek. Emin misin?")) {
+            db.ref('mesajlar').remove(); // Veritabanındaki 'mesajlar' klasörünü siler
+            location.reload(); // Sayfayı yeniler
+        }
+    });
+
+    // Veri tabanı silindiğinde diğer kullanıcının da ekranını temizle
+    db.ref('mesajlar').on('child_removed', (snapshot) => {
+        location.reload();
+    });
     </script>
 </body>
 </html>
+
