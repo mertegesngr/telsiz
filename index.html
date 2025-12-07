@@ -3,105 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Renkli Telsiz</title>
+    <title>Renkli Telsiz v2</title>
     <style>
         /* --- GENEL SAYFA DÜZENİ --- */
         body {
-            background-color: #e5ddd5; /* WhatsApp tarzı yumuşak arka plan */
-            /* Daha modern bir yazı tipi (yoksa standart sans-serif kullanır) */
+            background-color: #e5ddd5;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Tüm ekran yüksekliğini kapla */
-            height: -webkit-fill-available; /* iOS Safari için tam yükseklik düzeltmesi */
+            height: 100vh;
+            height: -webkit-fill-available; /* iOS Safari tam ekran düzeltmesi */
             margin: 0;
-            overflow: hidden; /* Sayfanın kaymasını engelle */
+            overflow: hidden; /* Sayfa asla kaymasın, sadece sohbet kutusu kaysın */
         }
 
-        /* --- BAŞLIK ALANI (HEADER) --- */
+        /* --- BAŞLIK --- */
         header {
-            /* Canlı mavi gradyan geçiş */
             background: linear-gradient(90deg, #007bff, #00d4ff);
             color: white;
             padding: 15px;
             text-align: center;
             font-weight: bold;
             font-size: 18px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Hafif gölge */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 10;
+            flex-shrink: 0; /* Başlık asla büzüşmesin */
         }
 
-        /* --- MESAJLARIN AKTIĞI ALAN --- */
+        /* --- SOHBET ALANI (DÜZELTİLDİ) --- */
         #chat-box {
-            flex: 1; /* Kalan tüm alanı kapla */
-            overflow-y: auto; /* Dikey kaydırmaya izin ver */
-            padding: 15px;
+            flex: 1; /* Kalan boşluğu doldur */
             display: flex;
             flex-direction: column;
-            gap: 10px; /* Mesajlar arası boşluk */
-            /* Arka plana hafif bir desen ekleyelim (isteğe bağlı) */
+            overflow-y: auto; /* İçerik taşarsa kaydırma çubuğu çıkar */
+            min-height: 0; /* !!! İŞTE SİHİRLİ KOD BU !!! (Kutunun sonsuza uzamasını engeller) */
+            padding: 15px;
+            gap: 10px;
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
 
         /* --- MESAJ BALONLARI --- */
         .mesaj {
-            max-width: 75%; /* Mesaj genişliğini sınırla */
+            max-width: 75%;
             padding: 10px 15px;
-            border-radius: 20px; /* Yuvarlak köşeler */
+            border-radius: 20px;
             font-size: 15px;
             position: relative;
             word-wrap: break-word;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Hafif derinlik */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             line-height: 1.4;
+            flex-shrink: 0; /* Mesajların sıkışmasını engelle */
         }
-
-        /* Benim gönderdiğim mesajlar (Sağda, Mavi) */
         .mesaj.ben {
-            align-self: flex-end; /* Sağa yasla */
-            background-color: #0084ff; /* Canlı mavi */
+            align-self: flex-end;
+            background-color: #0084ff;
             color: white;
-            border-bottom-right-radius: 5px; /* Konuşma balonu efekti için köşeyi sivrilt */
+            border-bottom-right-radius: 5px;
         }
-
-        /* Karşıdan gelen mesajlar (Solda, Beyaz) */
         .mesaj.o {
-            align-self: flex-start; /* Sola yasla */
-            background-color: #ffffff; /* Temiz beyaz */
-            color: #333; /* Koyu gri yazı */
-            border-bottom-left-radius: 5px; /* Konuşma balonu efekti */
+            align-self: flex-start;
+            background-color: #ffffff;
+            color: #333;
+            border-bottom-left-radius: 5px;
         }
 
-        /* --- GİRİŞ ALANI (ALT KISIM) --- */
+        /* --- GİRİŞ ALANI --- */
         form {
-            background: #f0f2f5; /* Açık gri zemin */
+            background: #f0f2f5;
             padding: 10px;
             display: flex;
-            align-items: center; /* Dikey ortala */
+            align-items: center;
             border-top: 1px solid #ddd;
-            /* iOS'ta klavye açılınca güvenli alan bırak */
-            padding-bottom: env(safe-area-inset-bottom, 10px); 
+            padding-bottom: env(safe-area-inset-bottom, 10px);
+            flex-shrink: 0; /* Formun ezilmesini veya kaybolmasını engelle */
         }
-
-        /* Yazı yazma kutusu */
         input {
             flex: 1;
             background: #ffffff;
             border: none;
-            border-radius: 25px; /* Hap şeklinde yuvarlak */
+            border-radius: 25px;
             color: #333;
             padding: 12px 20px;
             outline: none;
-            font-family: inherit;
-            font-size: 16px; /* Mobilde rahat okuma için 16px şart */
+            font-size: 16px;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
-
-        /* Gönder butonu (Ok işareti) */
         button {
-            background: #007bff; /* Mavi */
+            background: #007bff;
             color: white;
             border: none;
-            border-radius: 50%; /* Tam yuvarlak */
+            border-radius: 50%;
             width: 45px;
             height: 45px;
             margin-left: 8px;
@@ -110,13 +101,10 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            transition: background 0.2s;
+            flex-shrink: 0;
         }
-        button:hover { background: #0056b3; } /* Üzerine gelince koyulaş */
-        button:active { transform: scale(0.95); } /* Tıklama efekti */
-
-        /* Scrollbar'ı gizle (daha temiz görünüm için) */
-        ::-webkit-scrollbar { width: 0px; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -135,7 +123,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // SENİN VERDİĞİN BİLGİLERLE GÜNCELLENMİŞ AYARLAR
+        // SENİN BİLGİLERİN
         const firebaseConfig = {
             apiKey: "AIzaSyCawPFjDtHBsM8Rj-8Rk19axCnK5x2qmXw",
             authDomain: "telsiz-chat.firebaseapp.com",
@@ -169,7 +157,7 @@
                     zaman: Date.now()
                 });
                 input.value = '';
-                input.focus(); // Mesaj attıktan sonra klavye kapanmasın
+                input.focus();
             }
         });
 
@@ -186,8 +174,10 @@
             }
             
             chatBox.appendChild(div);
-            // Yumuşak bir şekilde en alta kaydır
-            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+            // Kaydırma işlemini garantile
+            setTimeout(() => {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 50);
         });
     </script>
 </body>
